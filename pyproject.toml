@@ -1,0 +1,63 @@
+[tool.poetry]
+name = "snakechat"
+version = "1.0.0"
+description = "Whatsapp Web API for Python"
+authors = ["Utvikler Team¿"]
+license = "Apache-2.0"
+readme = "README.md"
+exclude = [
+    "docs/",
+    "gosnakechat/"
+]
+include = [
+    "snakechat/snakechat-*"
+]
+
+
+[tools.pyright]
+
+
+[tool.poetry.dependencies]
+python = ">=3.10"
+protobuf = "^4.25.1"
+pillow = "^10.1.0"
+requests = "^2.31.0"
+phonenumbers = "^8.13.27"
+linkpreview = "^0.8.3"
+segno = "^1.6.0"
+python-magic = [
+    { version = "0.4.27", markers = "platform_system != 'Windows'"}
+]
+python-magic-bin = [
+    { version = '0.4.14', markers = "platform_system == 'Windows'" },
+]
+tqdm = "^4.66.1"
+
+[tool.mypy]
+exclude = [
+    "_pb2.py"
+]
+ignore_missing_imports = true
+
+
+[tool.poetry.group.dev.dependencies]
+segno = "^1.6.0"
+mypy-protobuf = "^3.5.0"
+types-requests = "^2.31.0.20240106"
+
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^7.3.7"
+myst-parser = "^2.0.0"
+sphinx-autodoc-typehints = "^2.1.1"
+furo = "^2024.5.6"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+
+[tool.poetry.scripts]
+docsbuild = "docs.build:build"
+build = "gosnakechat.build:build"
+version = "gosnakechat.build:set_version"

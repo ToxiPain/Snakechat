@@ -1,0 +1,872 @@
+syntax = "proto2";
+import "waVnameCert/WAWebProtobufsVnameCert.proto";
+import "waE2E/WAWebProtobufsE2E.proto";
+import "waWeb/WAWebProtobufsWeb.proto";
+import "waSyncAction/WASyncAction.proto";
+import "waHistorySync/WAWebProtobufsHistorySync.proto";
+option go_package = "./defproto";
+package snakechat;
+
+//types
+message JID {
+    required string User = 1;
+    required uint32 RawAgent  = 2;
+    required uint32 Device = 3;
+    required uint32 Integrator= 4;
+    required string Server=5;
+    optional bool IsEmpty = 6 [default = false];
+}
+message MessageInfo{
+    required MessageSource MessageSource = 1;
+    required string ID = 2;
+    required int64 ServerID = 3;
+    required string Type = 4;
+    required string Pushname = 5;
+    required int64 Timestamp = 6;
+    required string Category = 7;
+    required bool Multicast = 8;
+    required string MediaType = 9;
+    required string Edit = 10; //enum
+    optional VerifiedName VerifiedName = 11;
+    optional DeviceSentMeta DeviceSentMeta = 12;
+}
+message UploadResponse {
+    required string url = 1;
+    required string DirectPath = 2;
+    required string Handle = 3;
+    required bytes MediaKey = 4;
+    required bytes FileEncSHA256 = 5;
+    required bytes FileSHA256 = 6;
+    required uint32 FileLength = 7;
+}
+message MessageSource {
+    required JID Chat = 1;
+    required JID Sender = 2;
+    required bool IsFromMe = 3;
+    required bool IsGroup = 4;
+    required JID BroadcastListOwner = 5;
+}
+message DeviceSentMeta {
+    required string DestinationJID = 1;
+    required string Phash = 2;
+}
+// message MessageInfo{
+//     required MessageSource MessageSource = 1;
+//     required string ID = 2;
+//     required string ServerID=3;
+//     required string Type = 4;
+//     required string PushName = 5;
+//     required uint64 Timestamp = 6;
+//     required string Category = 7;
+//     required bool Multicast = 8;
+//     required string MediaType = 9;
+//     required string EditAttribute = 10;
+
+// }
+message VerifiedName {
+    optional WAWebProtobufsVnameCert.VerifiedNameCertificate Certificate = 1;
+    optional WAWebProtobufsVnameCert.VerifiedNameCertificate.Details Details = 2;
+}
+message IsOnWhatsAppResponse {
+    required string Query = 1;
+    required JID JID = 2;
+    required bool IsIn = 3;
+    optional VerifiedName VerifiedName = 4;
+}
+
+message UserInfo {
+    optional VerifiedName VerifiedName = 1;
+    required string Status = 2;
+    required string PictureID = 3;
+    repeated JID Devices = 4;
+}
+
+message Device {
+    optional JID JID = 1;
+    required string Platform = 2;
+    required string BussinessName = 3;
+    required string PushName = 4;
+    required bool Initialized = 5;
+}
+
+
+// GROUP
+message GroupName {
+    required string Name = 1;
+    required int64 NameSetAt=2;
+    required JID NameSetBy=3;
+}
+message GroupTopic{
+    required string Topic = 1;
+    required string TopicID = 2;
+    required int64 TopicSetAt = 3;
+    required JID TopicSetBy = 4;
+    required bool TopicDeleted = 5;
+}
+message GroupLocked {
+    required bool isLocked = 1;
+}
+message GroupAnnounce {
+    required bool IsAnnounce = 1;
+    required string AnnounceVersionID = 2;
+}
+message GroupEphemeral{
+    required bool IsEphemeral = 1;
+    required uint32 DisappearingTimer = 2;
+}
+message GroupIncognito{
+    required bool IsIncognito = 1;
+}
+message GroupParent {
+    required bool IsParent = 1;
+    required string DefaultMembershipApprovalMode = 2;
+}
+message GroupLinkedParent {
+    required JID LinkedParentJID = 1;
+}
+message GroupIsDefaultSub {
+    required bool IsDefaultSubGroup = 1;
+}
+message GroupParticipantAddRequest {
+    required string Code = 1;
+    required float Expiration = 2;
+}
+message GroupParticipant {
+    optional JID JID = 1;
+    required JID LID = 2;
+    required bool IsAdmin = 3;
+    required bool IsSuperAdmin = 4;
+    required string DisplayName = 5;
+    required int32 Error = 6;
+    optional GroupParticipantAddRequest AddRequest = 7;
+}
+message GroupInfo{
+    required JID OwnerJID=2;
+    required JID JID=1;
+    required GroupName GroupName = 3;
+    required GroupTopic GroupTopic = 4;
+    required GroupLocked GroupLocked = 5;
+    required GroupAnnounce GroupAnnounce = 6;
+    required GroupEphemeral GroupEphemeral = 7;
+    required GroupIncognito GroupIncognito = 8;
+    required GroupParent GroupParent = 9;
+    required GroupLinkedParent GroupLinkedParent = 10;
+    required GroupIsDefaultSub GroupIsDefaultSub = 11;
+    required float GroupCreated = 12;
+    required string ParticipantVersionID = 13;
+    repeated GroupParticipant Participants = 14;
+    enum GroupMemberAddMode {
+        GroupMemberAddModeAdmin = 1;
+    }
+}
+message MessageDebugTimings{
+    required int64 Queue = 1;
+    required int64 Marshal = 2;
+    required int64 GetParticipants = 3;
+    required int64 GetDevices = 4;
+    required int64 GroupEncrypt = 5;
+    required int64 PeerEncrypt = 6;
+    required int64 Send = 7;
+    required int64 Resp = 8;
+    required int64 Retry = 9;
+}
+message SendResponse {
+    required int64 Timestamp = 1;
+    required string ID = 2;
+    required int64 ServerID = 3;
+    required MessageDebugTimings DebugTimings = 4;
+}
+
+message SendMessageReturnFunction {
+    optional string Error = 1;
+    optional SendResponse SendResponse = 2;
+}
+
+
+
+
+
+
+
+
+//Function
+message GetGroupInfoReturnFunction{
+    optional GroupInfo GroupInfo = 1;
+    optional string Error = 2;
+}
+message JoinGroupWithLinkReturnFunction{
+    optional string Error = 1;
+    optional JID Jid = 2;
+}
+message GetGroupInviteLinkReturnFunction{
+    optional string InviteLink = 1;
+    optional string Error = 2;
+}
+message DownloadReturnFunction {
+    optional bytes Binary = 1;
+    optional string Error = 2;
+}
+message UploadReturnFunction {
+    optional UploadResponse UploadResponse = 1;
+    optional string Error = 2;
+}
+
+message SetGroupPhotoReturnFunction {
+    required string PictureID = 1;
+    optional string Error = 2;
+}
+message IsOnWhatsAppReturnFunction {
+    repeated IsOnWhatsAppResponse IsOnWhatsAppResponse = 1;
+    optional string Error = 2;
+}
+message GetUserInfoSingleReturnFunction {
+    optional JID JID = 1;
+    optional UserInfo UserInfo = 2;
+}
+message GetUserInfoReturnFunction {
+    repeated GetUserInfoSingleReturnFunction UsersInfo = 1;
+    optional string Error = 2;
+}
+message BuildPollVoteReturnFunction {
+    optional WAWebProtobufsE2E.Message PollVote = 1;
+    optional string Error = 2;
+}
+message CreateNewsLetterReturnFunction{
+    optional NewsletterMetadata NewsletterMetadata = 1;
+    optional string Error = 2;
+}
+message GetBlocklistReturnFunction{
+    optional Blocklist Blocklist = 1;
+    optional string Error = 2;
+}
+message GetContactQRLinkReturnFunction {
+    required string Link = 1;
+    optional string Error = 2;
+}
+message GetGroupRequestParticipantsReturnFunction {
+    repeated JID Participants = 1;
+    optional string Error = 2;
+}
+message GetJoinedGroupsReturnFunction {
+    repeated GroupInfo Group = 1;
+    optional string Error = 2;
+}
+message ReqCreateGroup {
+    required string name = 1;
+    repeated JID Participants = 2;
+    required string CreateKey = 3;
+    optional GroupParent GroupParent = 4;
+    optional GroupLinkedParent GroupLinkedParent = 5;
+}
+message JIDArray {
+    repeated JID JIDS = 1;
+}
+
+message ArrayString {
+    repeated string data = 1;
+}
+message NewsLetterMessageMeta {
+    required int64 EditTS = 1;
+    required int64 OriginalTS = 2; 
+}
+message GroupDelete {
+    required bool Deleted = 1;
+    required string DeletedReason = 2;
+}
+message Message {
+    required MessageInfo Info = 1;
+    optional WAWebProtobufsE2E.Message Message = 2;
+    required bool IsEphemeral = 3;
+    required bool IsViewOnce = 4;
+    required bool IsViewOnceV2 = 5;
+    required bool IsViewOnceV2Extension = 6;
+    required bool IsDocumentWithCaption = 7;
+    required bool IsLottieSticker = 8;
+    required bool IsEdit = 9;
+    optional WAWebProtobufsWeb.WebMessageInfo SourceWebMsg = 10;
+    required string UnavailableRequestID = 11;
+    required int64 RetryCount = 12;
+    optional NewsLetterMessageMeta NewsLetterMeta = 13;
+}
+message CreateNewsletterParams {
+    required string Name = 1;
+    required string Description = 2;
+    required bytes Picture = 3;
+}
+message WrappedNewsletterState {
+    enum NewsletterState {
+        ACTIVE = 1;
+        SUSPENDED = 2;
+        GEOSUSPENDED = 3;
+    }
+    required NewsletterState Type = 1;
+}
+message NewsletterText {
+    required string Text = 1;
+    required string ID = 2;
+    required int64 UpdateTime = 3;
+}
+message ProfilePictureInfo {
+    required string URL = 1;
+    required string ID = 2;
+    required string Type = 3;
+    required string DirectPath = 4;
+}
+message NewsletterReactionSettings {
+    enum NewsletterReactionsMode {
+        ALL = 1;
+        BASIC = 2;
+        NONE = 3;
+        BLOCKLIST = 4;
+    }
+    required NewsletterReactionsMode Value = 1;
+}
+message NewsletterSetting {
+    required NewsletterReactionSettings ReactionCodes = 1;
+}
+message NewsletterThreadMetadata {
+    enum NewsletterVerificationState {
+        VERIFIED = 1;
+        UNVERIFIED = 2;
+    }
+    required int64 CreationTime = 1;
+    required string InviteCode = 2;
+    required NewsletterText Name = 3;
+    required NewsletterText Description = 4;
+    required int64 SubscriberCount = 5;
+    required NewsletterVerificationState VerificationState = 6;
+    optional ProfilePictureInfo Picture = 7;
+    required ProfilePictureInfo Preview = 8;
+    required NewsletterSetting Settings = 9;
+
+}
+enum NewsletterRole {
+    SUBSCRIBER = 1;
+    GUEST = 2;
+    ADMIN = 3;
+    OWNER = 4;
+}
+enum NewsletterMuteState {
+    ON = 1;
+    OFF = 2;
+}
+message NewsletterViewerMetadata {
+    required NewsletterMuteState Mute= 1;
+    required NewsletterRole Role = 2;
+}
+message NewsletterMetadata {
+    required JID ID = 1;
+    required WrappedNewsletterState State = 2;
+    required NewsletterThreadMetadata ThreadMeta = 3;
+    optional NewsletterViewerMetadata ViewerMeta = 4;
+
+}
+
+message Blocklist {
+    required string DHash = 1;
+    repeated JID JIDs = 2;
+}
+message Reaction {
+    required string type = 1;
+    required int64 count = 2;
+}
+message NewsletterMessage {
+    required int64 MessageServerID = 1;
+    required int64 ViewsCount = 2;
+    repeated Reaction ReactionCounts = 3;
+    required WAWebProtobufsE2E.Message Message = 4;
+}
+
+message GetNewsletterMessageUpdateReturnFunction {
+    repeated NewsletterMessage NewsletterMessage  = 1;
+    optional string Error = 2;
+}
+
+message PrivacySettings {
+    enum PrivacySetting {
+        UNDEFINED = 1;
+        ALL = 2;
+        CONTACTS = 3;
+        CONTACT_BLACKLIST = 4;
+        MATCH_LAST_SEEN = 5;
+        KNOWN = 6;
+        NONE = 7;
+    }
+    required PrivacySetting GroupAdd = 1;
+    required PrivacySetting LastSeen = 2;
+    required PrivacySetting Status = 3;
+    required PrivacySetting Profile = 4;
+    required PrivacySetting ReadReceipts = 5;
+    required PrivacySetting CallAdd = 6;
+    required PrivacySetting Online = 7;
+}
+
+message NodeAttrs {
+    required string name = 1;
+    oneof Value {
+        bool boolean = 2;
+        int64 integer = 3;
+        string text = 4;
+        JID jid = 5;
+    }
+}
+
+message Node {
+    required string Tag = 1;
+    repeated NodeAttrs Attrs = 2;
+    repeated Node Nodes = 3;
+    optional bool Nil = 4 [default=false]; 
+    optional bytes Bytes = 5;
+}
+
+message InfoQuery {
+    required string Namespace = 1;
+    required string Type = 2;
+    required string To = 3;
+    repeated Node Content = 4;
+}
+
+message GetProfilePictureParams {
+    optional bool Preview = 1;
+    optional string ExistingID = 2;
+    optional bool IsCommunity = 3;
+}
+
+message GetProfilePictureReturnFunction{
+    optional ProfilePictureInfo Picture = 1;
+    optional string Error = 2;
+}
+message StatusPrivacy {
+    enum StatusPrivacyType {
+        CONTACTS = 1;
+        BLACKLIST = 2;
+        WHITELIST = 3;
+    }
+    required StatusPrivacyType Type = 1;
+    repeated JID List = 2;
+    required bool IsDefault = 3;
+}
+message GetStatusPrivacyReturnFunction {
+    repeated StatusPrivacy StatusPrivacy = 1;
+    optional string Error = 2;
+}
+
+message GroupLinkTarget {
+    required JID JID = 1;
+    required GroupName GroupName = 2;
+    required GroupIsDefaultSub GroupIsDefaultSub = 3;
+}
+message GroupLinkChange {
+    enum ChangeType {
+        PARENT = 1;
+        SUB = 2;
+        SIBLING = 3;
+    }
+    required ChangeType Type = 1;
+    required string UnlinkReason = 2;
+    required GroupLinkTarget Group = 3;
+}
+message GetSubGroupsReturnFunction{
+    repeated GroupLinkTarget GroupLinkTarget = 1;
+    optional string Error = 2;
+}
+message GetSubscribedNewslettersReturnFunction {
+    repeated NewsletterMetadata Newsletter = 1;
+    optional string Error = 2;
+}
+message GetUserDevicesreturnFunction {
+    repeated JID JID =1;
+    optional string Error = 2;
+}
+message NewsletterSubscribeLiveUpdatesReturnFunction {
+    optional int64 Duration = 1;
+    optional string Error = 2;
+}
+message PairPhoneParams{
+    optional string phone = 1;
+    optional bool showPushNotification = 2;
+    optional int32 clientType = 3;
+    optional string clientDisplayName = 4;
+}
+
+message ContactQRLinkTarget {
+    required JID JID = 1;
+    required string Type = 2;
+    required string PushName = 3;
+}
+
+message ResolveContactQRLinkReturnFunction {
+    optional ContactQRLinkTarget ContactQrLink = 1;
+    optional string Error = 2;
+}
+message BusinessMessageLinkTarget {
+    required JID JID = 1;
+    required string PushName = 2;
+    required string VerifiedName = 3;
+    required bool IsSigned = 4;
+    required string VerifiedLevel = 5;
+    required string Message = 6;
+}
+message ResolveBusinessMessageLinkReturnFunction {
+    optional BusinessMessageLinkTarget MessageLinkTarget = 1;
+    optional string Error =2;
+}
+message MutationInfo {
+    repeated string Index = 1;
+    required int32 Version = 2;
+    required WASyncAction.SyncActionValue Value = 3;
+}
+message PatchInfo {
+    enum WAPatchName {
+        CRITICAL_BLOCK = 1;
+        CRITICAL_UNBLOCK_LOW = 2;
+        REGULAR_LOW = 3;
+        REGULAR_HIGH = 4;
+        REGULAR = 5;
+    }
+    required int64 Timestamp = 1;
+    required WAPatchName Type = 2;
+    repeated MutationInfo Mutations = 3;
+}
+message ContactsPutPushNameReturnFunction{
+    required bool Status = 1;
+    optional string PreviousName = 2;
+    optional string Error = 3;
+}
+message ContactEntry {
+    required JID JID = 1;
+    required string FirstName = 2;
+    required string FullName = 3;
+}
+message ContactEntryArray {
+    repeated ContactEntry ContactEntry = 1;
+}
+message SetPrivacySettingReturnFunction {
+    optional PrivacySettings settings = 1;
+    optional string Error = 2;
+}
+message ContactsGetContactReturnFunction{
+    optional ContactInfo ContactInfo = 1;
+    optional string Error = 2;
+}
+message ContactInfo {
+    required bool Found = 1;
+    required string FirstName = 2;
+    required string FullName = 3;
+    required string PushName = 4;
+    required string BusinessName = 5;
+}
+message Contact{
+    required JID JID = 1;
+    required ContactInfo Info = 2;
+}
+message ContactsGetAllContactsReturnFunction{
+    repeated Contact Contact = 1;
+    optional string Error = 2;
+}
+// events
+message QR{ //1
+    repeated string Codes = 1;
+}
+message PairStatus { //2
+    enum PStatus {
+        ERROR = 1;
+        SUCCESS = 2;
+    }
+    required JID ID = 1;
+    required string BusinessName = 2;
+    required string Platform = 3;
+    required PStatus Status = 4;
+    optional string Error = 5;
+}
+message Connected {
+    required bool status = 1;
+} // 3
+
+message KeepAliveTimeout { // 4
+    required int64 ErrorCount = 1;
+    required int64 LastSuccess = 2;
+}
+
+message KeepAliveRestored{} //5
+
+enum ConnectFailureReason {
+    GENERIC = 1;
+    LOGGED_OUT = 2;
+    TEMP_BANNED = 3;
+    MAIN_DEVICE_GONE = 4;
+    UNKNOWN_LOGOUT = 5;
+    CLIENT_OUTDATED = 6;
+    BAD_USER_AGENT = 7;
+    INTERNAL_SERVER_ERROR = 8;
+    EXPERIMENTAL = 9;
+    SERVICE_UNAVAILABLE = 10;
+}
+message LoggedOut { // 6
+    required bool OnConnect = 1;
+    required ConnectFailureReason Reason = 2;
+}
+message StreamReplaced {} //7
+message TemporaryBan { // 8
+    enum TempBanReason {
+        SEND_TO_TOO_MANY_PEOPLE = 1;
+        BLOCKED_BY_USERS = 2;
+        CREATED_TOO_MANY_GROUPS = 3;
+        SENT_TOO_MANY_SAME_MESSAGE = 4;
+        BROADCAST_LIST = 5; 
+    }
+    required TempBanReason Code = 1;
+    required int64 Expire = 2;
+}
+
+message ConnectFailure { //9
+    required ConnectFailureReason Reason = 1;
+    required string Message = 2;
+    required Node Raw = 3;
+}
+
+message ClientOutdated{} // 10
+
+message StreamError { // 11
+    required string Code = 1;
+    required Node Raw = 4;
+}
+
+message Disconnected{
+    required bool status = 1;
+} // 12
+
+message HistorySync { // 13
+    required WAWebProtobufsHistorySync.HistorySync Data = 1;
+}
+
+//message DecryptFailMode // 14
+//message UndecryptableMessage // 15
+//message NewsLetterMessageMeta (Defined) // 16
+// Message (Defined) // 17
+message Receipt { //18
+    enum ReceiptType {
+        DELIVERED = 1;
+        SENDER = 2;
+        RETRY = 3;
+        READ = 4;
+        READ_SELF = 5;
+        PLAYED = 6;
+        PLAYED_SELF = 7;
+        SERVER_ERROR = 8;
+        INACTIVE = 9;
+        PEER_MSG = 10;
+        HISTORY_SYNC = 11;
+    }
+    required MessageSource MessageSource = 1;
+    repeated string MessageIDs = 2;
+    required int64 Timestamp = 3;
+    required ReceiptType Type = 4;
+}
+
+message ChatPresence { //19
+    enum ChatPresence {
+        COMPOSING = 1;
+        PAUSED = 2;
+    }
+    enum ChatPresenceMedia {
+        TEXT = 1;
+        AUDIO = 2;
+    }
+    required MessageSource MessageSource = 1;
+    required ChatPresence State = 2;
+    required ChatPresenceMedia Media = 3;
+}
+
+message Presence { // 20
+    required JID From = 1;
+    required bool Unavailable = 2;
+    required int64 LastSeen = 3;
+}
+
+message JoinedGroup { // 21
+    required string Reason = 1;
+    required string Type = 2;
+    required string CreateKey = 3;
+    required GroupInfo GroupInfo = 4;
+}
+message GroupInfoEvent { //22
+    required JID JID = 1;
+    required string Notify = 2;
+    optional JID Sender = 3;
+    required int64 Timestamp = 4;
+    optional GroupName Name = 5;
+    optional GroupTopic Topic = 6;
+    optional GroupLocked Locked = 7;
+    optional GroupAnnounce Announce = 8;
+    optional GroupEphemeral Ephemeral =9;
+    optional GroupDelete Delete = 10;
+    optional GroupLinkChange Link = 11;
+    optional GroupLinkChange Unlink = 12;
+    optional string NewInviteLink = 13;
+    required string PrevParticipantsVersionID = 14;
+    required string ParticipantVersionID = 15;
+    required string JoinReason = 16;
+    repeated JID Join = 17;
+    repeated JID Leave = 18;
+    repeated JID Promote = 19;
+    repeated JID Demote = 20;
+    repeated Node UnknownChanges = 21;
+
+}
+message Picture { // 23
+    required JID JID = 1;
+    required JID Author = 2;
+    required int64 Timestamp = 3;
+    required bool Remove = 4;
+}
+
+message IdentityChange { // 24
+    required JID JID = 1;
+    required int64 Timestamp = 2;
+    required bool Implicit = 3;
+}
+
+message privacySettingsEvent { // 25
+    required PrivacySettings NewSettings = 1;
+    required bool GroupAddChanged = 2;
+    required bool LastSeenChanged = 3;
+    required bool StatusChanged = 4;
+    required bool ProfileChanged = 5;
+    required bool ReadReceiptsChanged = 6;
+    required bool OnlineChanged = 7;
+    required bool CallAddChanged = 8;
+}
+
+message OfflineSyncPreview { //26
+    required int32 Total = 1;
+    required int32 AppDataChanges = 2;
+    required int32 Message = 3;
+    required int32 Notifications = 4;
+    required int32 Receipts = 5;
+}
+
+message OfflineSyncCompleted { // 27
+    required int32 Count = 1;
+}
+//MediaRetryError (not implemented yet) // 28
+//MediaRetry(not implemented yet) // 29
+
+message BlocklistEvent { // 30
+    enum Actions {
+        DEFAULT = 1;
+        MODIFY = 2;
+    }
+    required Actions Action = 1;
+    required string DHASH = 2;
+    required string PrevDHash = 3;
+    repeated BlocklistChange Changes = 4;
+}
+
+message BlocklistChange { // 31
+    enum Action {
+        BLOCK = 1;
+        UNBLOCK = 2;
+    }
+    required JID JID = 1;
+    required Action BlockAction = 2;
+}
+
+message NewsletterJoin { // 32
+    required NewsletterMetadata NewsletterMetadata = 1;
+}
+message NewsletterLeave { // 33
+    required JID ID = 1;
+    required NewsletterRole Role = 2;
+}
+
+message NewsletterMuteChange { // 34
+    required JID ID = 1;
+    required NewsletterMuteState Mute = 2;
+}
+
+message NewsletterLiveUpdate { //35
+    required JID JID = 1;
+    required int64 TIME = 2;
+    repeated NewsletterMessage Messages = 3;
+}
+// call events
+message BasicCallMeta {
+    required JID from = 1;
+    required int64 timestamp = 2;
+    required JID callCreator = 3;
+    required string callID = 4;
+}
+message CallRemoteMeta {
+    required string remotePlatform = 1;
+    required string remoteVersion = 2;
+}
+//events
+message CallOffer {
+    required BasicCallMeta basicCallMeta = 1;
+    required CallRemoteMeta callRemoteMeta = 2;
+    required Node data = 3;
+
+}
+message CallAccept {
+    required BasicCallMeta basicCallMeta = 1;
+    required CallRemoteMeta callRemoteMeta = 2;
+    required Node data = 3;
+
+}
+message CallPreAccept {
+    required BasicCallMeta basicCallMeta = 1;
+    required CallRemoteMeta callRemoteMeta = 2;
+    required Node data = 3;
+
+}
+message CallTransport {
+    required BasicCallMeta basicCallMeta = 1;
+    required CallRemoteMeta callRemoteMeta = 2;
+    required Node data = 3;
+
+}
+message CallOfferNotice {
+    required BasicCallMeta basicCallMeta = 1;
+    required string media = 2;
+    required string type = 3;
+    required Node data = 4;
+
+}
+message CallRelayLatency {
+    required BasicCallMeta basicCallMeta = 1;
+    required Node data = 2;
+}
+message CallTerminate {
+    required BasicCallMeta basicCallMeta = 1;
+    required string reason = 2;
+    required Node data = 3;
+}
+message UnknownCallEvent {
+    required Node node = 1;
+}
+message UpdateGroupParticipantsReturnFunction {
+    optional string Error = 1;
+    repeated GroupParticipant participants = 2;
+}
+
+message GetMessageForRetryReturnFunction{
+    optional bool isEmpty = 1 [default=false];
+    optional WAWebProtobufsE2E.Message Message = 2;
+}
+
+//chat_setting_store
+message LocalChatSettings {
+    required bool Found = 1;
+    required double MutedUntil = 2;
+    required bool Pinned = 3;
+    required bool Archived = 4;
+}
+// New Verision for Function
+message ReturnFunctionWithError {
+    optional string Error = 1;
+    oneof Return {
+        LocalChatSettings LocalChatSettings = 2;
+    }
+
+}

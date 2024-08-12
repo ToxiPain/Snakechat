@@ -1,0 +1,13 @@
+{
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        ".",
+        "-p",
+        "*test.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true,
+    "python.venvPath": "/home/ToxiPain/.cache/pypoetry/virtualenvs/snakechat-RIKrwKG1-py3.11/bin/python",
+    "python.pythonPath": "/home/ToxiPain/.cache/pypoetry/virtualenvs/snakechat-RIKrwKG1-py3.11/bin/python"
+}
