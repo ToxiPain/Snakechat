@@ -1,4 +1,5 @@
 # There is some basic functions for a whatsapp bot conection... id whould work without anothers dependencies
+# This example does not use multi device whatsapp
 
 import logging, os, signal, sys
 from datetime import timedelta
