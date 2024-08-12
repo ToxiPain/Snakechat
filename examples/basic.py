@@ -19,8 +19,8 @@ client = NewClient("db.sqlite3")
 
 @client.event(ConnectedEv)
 def on_connected(_: NewClient, __: ConnectedEv):
-    log.info("⚡ Connected")
-
+    log.info("⚡ Connected - if there is some problems pleace restart the panel/cmd after made the conection socket!")
+# Sometimes there is a error from "GoSnakechat" importations.
 @client.event(MessageEv)
 def on_message(client: NewClient, message: MessageEv):
     text = message.Message.conversation or message.Message.extendedTextMessage.text
