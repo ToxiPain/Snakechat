@@ -24,3 +24,6 @@ SnakeChat es un proyecto de API WebSocket basado en una conexión no oficial de 
    ```bash
    pip install snakechat
    ```
+
+### Runea el ejemplo:
+**Ver scripts de ejemplo: <a href="https://github.com/ToxiPain/snakechat/src/examples">Examples</a>**
