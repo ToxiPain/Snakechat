@@ -2,7 +2,7 @@
 name = "snakechat"
 version = "1.0.0"
 description = "Whatsapp Web API for Python"
-authors = ["Utvikler Team <email@example.com>"]
+authors = ["Utvikler Team <allstarf123@gmail.com>"]
 license = "Apache-2.0"
 readme = "README.md"
 exclude = [
