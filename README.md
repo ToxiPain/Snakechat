@@ -1,4 +1,4 @@
-# <p align="center">SnakeChat WA (Deprecated) 🐍</p> <p align="center"> <img src="src/logo.jpg" width="200px">
+# <p align="center">(Deprecated) SnakeChat WA 🐍</p> <p align="center"> <img src="src/logo.jpg" width="200px">
 </p>
 
 [![Whatsapp](https://img.shields.io/badge/Contacto-WhatsApp-%2322BC18)](https://wa.me/50557418454)
