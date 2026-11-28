@@ -91,6 +91,10 @@ await client.send_msg(chat_jid, "¡Hola Mundo!")
 ```python
 await client.send_msg(chat_jid, "¡Respuesta de mensaje!", reply=umsg)
 ```
+**Mensaje con etiqueta de reenviado:**
+```python
+await client.send_msg(chat_jid, "Mensaje reenviado", forward=True)
+```
 **Editar un mensaje:**
 ```python
 msg_id = await client.send_msg(chat_jid, "Texto original")
@@ -129,6 +133,30 @@ await client.send_sticker(chat_jid, "https://ejemplo.com/imagen.png")
 await client.sticker_react(chat_jid, umsg, "ruta/al/sticker.png")
 # URL
 await client.sticker_react(chat_jid, umsg, "https://ejemplo.com/imagen.png")
+```
+**Información de usuario y mensaje**
+```python
+msg_id = umsg.id
+texto = umsg.text
+nombre = umsg.push_name
+numero = umsg.number
+sender = umsg.sender_base
+es_grupo = umsg.is_group
+citado = umsg.quoted          # QuotedMessage o None
+menciones = umsg.mentioned_jids
+reenviado = umsg.is_forwarded
+```
+**Estados (escribiendo, grabando, online / offline):**
+```python
+# Escribiendo
+await client.send_typing(chat_jid)
+await client.stop_typing(chat_jid)
+# Grabando
+await client.send_recording(chat_jid)
+await client.stop_recording(chat_jid)
+# Online / Offline
+await client.set_online()
+await client.set_offline()
 ```
 - - -
 ### Disclaimer:
