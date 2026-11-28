@@ -74,7 +74,7 @@ if __name__ == "__main__":
 ```
 **Escuchar mensajes entrantes:**
 ```python
-from wapipeline import IncomingMessage
+from wapipeline import IncomingMessage, tag_user, tag_group
 
 @client.on("message")
 async def on_message(umsg: IncomingMessage):
