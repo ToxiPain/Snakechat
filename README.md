@@ -118,11 +118,17 @@ await client.send_msg(chat_jid, f"Mención de grupo {tag_group(group_jid)}", g_t
 ```
 **Enviar sticker:**
 ```python
+# Local:
 await client.send_sticker(chat_jid, "ruta/al/sticker.png")
+# URL:
+await client.send_sticker(chat_jid, "https://ejemplo.com/imagen.png")
 ```
 **Reaccionar con sticker:**
 ```python
+# Local
 await client.sticker_react(chat_jid, umsg, "ruta/al/sticker.png")
+# URL
+await client.sticker_react(chat_jid, umsg, "https://ejemplo.com/imagen.png")
 ```
 - - -
 ### Disclaimer:
