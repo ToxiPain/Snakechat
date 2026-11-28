@@ -15,7 +15,7 @@ SnakeChat es un proyecto de API WebSocket basado en una conexión no oficial de 
 ### Funciones:
 | Compatibilidad con | Estado |
 |---|:---:|
-| Vinculación MultiDevice | ⚠️ (Solo QR) |
+| Vinculación MultiDevice (QR/Code) | ✅ |
 | Privado y grupos | ✅ |
 | Enviar mensajes de texto | ✅ |
 | Envío de respuesta de mensaje | ✅ |
