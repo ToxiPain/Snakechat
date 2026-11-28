@@ -1,0 +1,73 @@
+syntax = "proto2";
+
+package snakechat;
+
+// --- Protocolo Signal v3 ---
+
+message SignalMessage {
+  optional bytes ratchet_key = 1;
+  optional uint32 counter = 2;
+  optional uint32 previous_counter = 3;
+  optional bytes ciphertext = 4;
+}
+
+message PreKeySignalMessage {
+  optional uint32 registration_id = 5;
+  optional uint32 pre_key_id = 1;
+  optional uint32 signed_pre_key_id = 6;
+  optional bytes base_key = 2;
+  optional bytes identity_key = 3;
+  optional bytes message = 4;
+}
+
+// --- Mensajes de WhatsApp (WAMessage) ---
+
+message SenderKeyDistributionMessageWA {
+  optional string group_id = 1;
+  optional bytes axolotl_sender_key_distribution_message = 2;
+}
+
+message ContextInfo {
+  optional string stanza_id = 1;
+  optional string participant = 2;
+  optional WAMessage quoted_message = 3;
+  optional bool is_forwarded = 18;
+  optional uint32 forwarding_score = 21;
+}
+
+message ExtendedTextMessage {
+  optional string text = 1;
+  optional ContextInfo context_info = 17;
+}
+
+message ProtocolMessage {
+  optional uint32 type = 2;
+}
+
+message DeviceSentMessage {
+  optional string destination_jid = 1;
+  optional WAMessage message = 2;
+}
+
+message MessageKey {
+  optional string remote_jid = 1;
+  optional bool from_me = 2;
+  optional string id = 3;
+  optional string participant = 4;
+}
+
+message ReactionMessage {
+  optional MessageKey key = 1;
+  optional string text = 2;
+  optional string grouping_key = 3;
+  optional int64 sender_timestamp_ms = 4;
+}
+
+message WAMessage {
+  optional string conversation = 1;
+  optional SenderKeyDistributionMessageWA sender_key_distribution_message = 2;
+  optional ExtendedTextMessage extended_text_message = 6;
+  optional ProtocolMessage protocol_message = 12;
+  optional DeviceSentMessage device_sent_message = 31;
+  optional ReactionMessage react_message = 46;
+}
