@@ -57,7 +57,11 @@ snakechat @ git+https://github.com/ToxiPain/Snakechat.git
 import asyncio
 from client import SnakeChatClient
 
+# Vinculación por QR (Default):
 client = SnakeChatClient(debug=False)
+
+# Vinculación por Pairing Code (8 dígitos):
+# client = SnakeChatClient(debug=False, phone_number="505874182xx")
 
 # Escuchar cuando la conexión esté lista:
 @client.on("ready")
