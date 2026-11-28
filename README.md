@@ -34,7 +34,7 @@ SnakeChat es un proyecto de API WebSocket basado en una conexión no oficial de 
 | Leer información de grupos | ⏭️ (Próximamente) |
 | Leer eventos de grupos en tiempo real | ⏭️ (Próximamente) |
 | Modificar grupos y participantes | ⏭️ (Próximamente) |
-| Reportar / bloquear mensajes | ⏭️ (Próximamente) |
+| Reportar / bloquear usuarios | ⏭️ (Próximamente) |
 | Crear encuestas | ⏭️ (Próximamente) |
 | Enviar botones interactivos | ⏭️ (Próximamente) |
 | Enviar listas interactivas | ⏭️ (Próximamente) |
