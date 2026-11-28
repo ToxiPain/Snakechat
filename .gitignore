@@ -1,0 +1,34 @@
+# Python: caché y compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Entornos virtuales
+.venv/
+venv/
+env/
+ENV/
+
+# Empaquetado e instalación (pip / setuptools / wheel)
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+pip-wheel-metadata/
+
+# Credenciales, sesiones de WhatsApp y variables de entorno (MUY IMPORTANTE)
+.env
+state/creds.json
+state/*.json
+auth_info*/
+session*/
+*.session
+
+# Editores y sistema operativo
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+desktop.ini

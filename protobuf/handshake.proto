@@ -1,0 +1,169 @@
+syntax = "proto2";
+
+package snakechat;
+
+// --- Mensajes del Handshake Noise XX ---
+
+message HandshakeMessage {
+  optional HandshakeClientHello client_hello = 2;
+  optional HandshakeServerHello server_hello = 3;
+  optional HandshakeClientFinish client_finish = 4;
+}
+
+message HandshakeClientHello {
+  optional bytes ephemeral = 1;
+  optional bytes static = 2;
+  optional bytes payload = 3;
+}
+
+message HandshakeServerHello {
+  optional bytes ephemeral = 1;
+  optional bytes static = 2;
+  optional bytes payload = 3;
+}
+
+message HandshakeClientFinish {
+  optional bytes static = 1;
+  optional bytes payload = 2;
+}
+
+// --- ClientPayload (Registro por QR y Login con sesión guardada) ---
+
+message ClientPayload {
+  enum ConnectType {
+    CELLULAR_UNKNOWN = 0;
+    WIFI_UNKNOWN = 1;
+  }
+
+  enum ConnectReason {
+    PUSH = 0;
+    USER_ACTIVATED = 1;
+    SCHEDULED = 2;
+    ERROR_RECONNECT = 3;
+    NETWORK_SWITCH = 4;
+    PING_RECONNECT = 5;
+  }
+
+  message AppVersion {
+    optional uint32 primary = 1;
+    optional uint32 secondary = 2;
+    optional uint32 tertiary = 3;
+    optional uint32 quaternary = 4;
+  }
+
+  message UserAgent {
+    enum Platform {
+      ANDROID = 0;
+      IOS = 1;
+      WEB = 14;
+    }
+
+    enum ReleaseChannel {
+      RELEASE = 0;
+      BETA = 1;
+      ALPHA = 2;
+      DEBUG = 3;
+    }
+
+    optional Platform platform = 1;
+    optional AppVersion app_version = 2;
+    optional string mcc = 3;
+    optional string mnc = 4;
+    optional string os_version = 5;
+    optional string manufacturer = 6;
+    optional string device = 7;
+    optional string os_build_number = 8;
+    optional ReleaseChannel release_channel = 10;
+    optional string locale_language_iso6391 = 11;
+    optional string locale_country_iso31661_alpha2 = 12;
+  }
+
+  message WebInfo {
+    enum WebSubPlatform {
+      WEB_BROWSER = 0;
+      APP_STORE = 1;
+      WIN_STORE = 2;
+      DARWIN = 3;
+      WIN32 = 4;
+    }
+
+    optional string ref_token = 1;
+    optional string version = 2;
+    optional WebSubPlatform web_sub_platform = 4;
+  }
+
+  message DevicePairingRegistrationData {
+    optional bytes e_regid = 1;
+    optional bytes e_keytype = 2;
+    optional bytes e_ident = 3;
+    optional bytes e_skey_id = 4;
+    optional bytes e_skey_val = 5;
+    optional bytes e_skey_sig = 6;
+    optional bytes build_hash = 7;
+    optional bytes device_props = 8;
+  }
+
+  optional uint64 username = 1;
+  optional bool passive = 3;
+  optional UserAgent user_agent = 5;
+  optional WebInfo web_info = 6;
+  optional ConnectType connect_type = 12;
+  optional ConnectReason connect_reason = 13;
+  optional uint32 device = 18;
+  optional DevicePairingRegistrationData device_pairing_data = 19;
+  optional bool pull = 33;
+}
+
+// --- Propiedades del dispositivo (aparece en "Dispositivos vinculados") ---
+
+message DeviceProps {
+  enum PlatformType {
+    UNKNOWN = 0;
+    CHROME = 1;
+    FIREFOX = 2;
+    IE = 3;
+    OPERA = 4;
+    SAFARI = 5;
+    EDGE = 6;
+    DESKTOP = 7;
+  }
+
+  message AppVersion {
+    optional uint32 primary = 1;
+    optional uint32 secondary = 2;
+    optional uint32 tertiary = 3;
+  }
+
+  optional string os = 1;
+  optional AppVersion version = 2;
+  optional PlatformType platform_type = 3;
+  optional bool require_full_sync = 4;
+}
+
+// --- Identidad de dispositivo ADV (para completar pair-success) ---
+
+enum ADVEncryptionType {
+  E2EE = 0;
+  HOSTED = 1;
+}
+
+message ADVDeviceIdentity {
+  optional uint32 raw_id = 1;
+  optional uint64 timestamp = 2;
+  optional uint32 key_index = 3;
+  optional ADVEncryptionType account_type = 4;
+  optional ADVEncryptionType device_type = 5;
+}
+
+message ADVSignedDeviceIdentity {
+  optional bytes details = 1;
+  optional bytes account_signature_key = 2;
+  optional bytes account_signature = 3;
+  optional bytes device_signature = 4;
+}
+
+message ADVSignedDeviceIdentityHMAC {
+  optional bytes details = 1;
+  optional bytes hmac = 2;
+  optional ADVEncryptionType account_type = 3;
+}
